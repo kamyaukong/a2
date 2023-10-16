@@ -31,7 +31,11 @@ const handleSuccess = (data, res) => res.status(200).json(data);
 
 // get all products
 marketPlaceRoutes.route('/api/products').get((req, res) => {
-  ProductModel.find()
+  const query = {};
+  if(req.query.name) {
+    query.name = new RegExp(req.query.name, 'i');
+  }
+  ProductModel.find(query)
     .then(products => handleSuccess(products, res))
     .catch(err => handleError(err, res, 'find all error'));
 });
